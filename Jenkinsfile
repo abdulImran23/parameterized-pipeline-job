@@ -1,16 +1,24 @@
+/******  BRANCH - main  *****/
 pipeline {
     agent any
-
-    tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "M3916"
-    }
-
     stages {
-        stage('Echo Version') {
+        stage('Build') {
             steps {
-                sh 'echo Print Maven Version'
-                sh 'mvn -version'
+                sh 'mvn clean package -DskipTests=true'
+                archiveArtifacts 'target/hello-demo-*.jar'
+            }
+        }
+        stage('Containerization') {
+            steps {
+                sh 'echo Docker Build Image..'
+                sh 'echo Docker Tag Image....'
+                sh 'echo Docker Push Image......'
+            }
+        }
+        stage('Integration Testing') {
+            steps {
+                sh 'sleep 10s'
+                sh 'echo Testing using cURL commands......'
             }
         }
     }
